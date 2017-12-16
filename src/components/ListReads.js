@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom'
 import BookShelf from './BookShelf';
 
 const ListReads = ({ books, onMove=f=>f }) => {
@@ -15,7 +16,7 @@ const ListReads = ({ books, onMove=f=>f }) => {
         </div>
       </div>
       <div className="open-search">
-        <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+        <Link to='/search'>Add a book</Link>
       </div>
     </div>
   )
