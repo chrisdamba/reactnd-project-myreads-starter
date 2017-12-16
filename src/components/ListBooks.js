@@ -1,11 +1,16 @@
+import React from 'react'
 import Book from "./Book";
 
 const ListBooks = ({ books }) => {
     return (
-        <ol className="books-grid">
-            {books.map(book => <Book key={book.id} {...book} />)}
-        </ol>
-    )
+        <div className="bookshelf-books">
+            <ol className="books-grid">
+                {books.map(book => 
+                    <Book key={book.id} {...book} />)
+                }
+            </ol>
+        </div>
+   )
 }
 
 export default ListBooks
