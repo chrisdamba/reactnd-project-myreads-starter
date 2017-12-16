@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Book = ({ title, author, imageUrl }) => {
+const Book = ({ id, title, author, imageUrl, onMove=f=>f }) => {
     return (
         <li>
             <div className="book">
             <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${imageUrl}")` }}></div>
                 <div className="book-shelf-changer">
-                <select>
+                <select onChange={(e)=> {onMove(id, e.target.value)}}>
                     <option value="none" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
