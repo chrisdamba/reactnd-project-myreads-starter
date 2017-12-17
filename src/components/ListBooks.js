@@ -6,7 +6,7 @@ const ListBooks = ({ books, bookshelfCssClass, onMove=f=>f }) => {
         <div className={bookshelfCssClass}>
             <ol className="books-grid">
                 { books.length > 0 && (
-                    books.map(book => <Book key={book.id} {...book} books={books} onMove={(shelf) => onMove(book.id, shelf)} />)   
+                    books.map(book => <Book key={book.id} {...book} onMove={(shelf) => onMove(book.id, shelf)} />)   
                 )}
             </ol>
         </div>

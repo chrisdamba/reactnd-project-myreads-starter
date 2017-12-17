@@ -1,9 +1,6 @@
 import React from 'react';
 
-const Book = ({ id, title, authors, imageLinks, books, onMove=f=>f }) => {
-    const bookFound = books.find(b => b.id === id)
-    const shelf = bookFound ? bookFound.shelf: 'none'
-    
+const Book = ({ title, authors, imageLinks, shelf, onMove=f=>f }) => {
     return (
         <li>
             <div className="book">
