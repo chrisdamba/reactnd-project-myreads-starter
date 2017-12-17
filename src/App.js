@@ -15,7 +15,7 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-    BooksAPI.getAll().then(books => this.setState({books})) 
+    this.getBooks()
   }
 
   addBook = (book) => {
@@ -29,7 +29,7 @@ class BooksApp extends React.Component {
   getBooks() {
     BooksAPI.getAll()
       .then(books => this.setState({books}))
-      .catch(() => { alert('Something went wrong with your request.'); });
+      .catch(() => { alert('Something went wrong with your request.') })
   }
 
   moveBook = (id, shelf) => {
