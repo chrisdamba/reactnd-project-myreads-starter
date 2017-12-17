@@ -18,18 +18,39 @@ class BooksApp extends React.Component {
     BooksAPI.getAll().then(books => this.setState({books})) 
   }
 
+  addBook = (book) => {
+    const books = [
+      ...this.state.books,
+      book
+    ]
+    this.setState({books})
+  } 
+
+  getBooks() {
+    BooksAPI.getAll()
+      .then(books => this.setState({books}))
+      .catch(() => { alert('Something went wrong with your request.'); });
+  }
+
   moveBook = (id, shelf) => {
-    BooksAPI.update(id, shelf).then(data => {
-      const books = this.state.books.map(book => 
-        (book.id !== id) ?
-          book: 
-          {
-            ...book,
-            shelf
-          }
-      )
-      this.setState({books})
-    })
+    BooksAPI.update(id, shelf)
+      .then(() => this.getBooks())
+      .then(() => {
+        const bookFound = this.state.books.filter(book => book.id === id).length > 0
+        if (bookFound) {
+          BooksAPI.get(id).then(this.addBook)
+        } else {
+          const books = this.state.books.map(book => 
+            (book.id !== id) ?
+              book: 
+              {
+                ...book,
+                shelf
+              }
+          )
+          this.setState({books})
+        }  
+      })
   } 
 
   render() {
@@ -41,7 +62,9 @@ class BooksApp extends React.Component {
           <Route exact path='/' render={() => (
             <ListReads books={books} onMove={moveBook} />
           )} />
-          <Route path='/search'  component={SearchReads} />
+          <Route path='/search'  render={() => (
+            <SearchReads onMove={moveBook} />
+          )} />
         </div>
       </BrowserRouter>
     )

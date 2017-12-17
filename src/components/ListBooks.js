@@ -1,13 +1,13 @@
 import React from 'react'
 import Book from "./Book";
 
-const ListBooks = ({ books, onMove=f=>f }) => {
+const ListBooks = ({ books, bookshelfCssClass, onMove=f=>f }) => {
     return (
-        <div className="bookshelf-books">
+        <div className={bookshelfCssClass}>
             <ol className="books-grid">
-                {books.map(book => 
-                    <Book key={book.id} {...book} onMove={(shelf) => onMove(book.id, shelf)} />)
-                }
+                { books.length > 0 && (
+                    books.map(book => <Book key={book.id} {...book} books={books} onMove={(shelf) => onMove(book.id, shelf)} />)   
+                )}
             </ol>
         </div>
    )
