@@ -17,16 +17,15 @@ class SearchReads extends Component {
     
       constructor() {
         super();
-        this.performSearch = debounce(300, false, this.performSearch);
+        this.search = debounce(500, false, this.search);
       }
     
-      handleQueryChange(event) {
-        const query = event.target.value;
+      onQueryChange(query) {
         this.setState({ query });
-        this.performSearch(query);
+        this.search(query);
       }
     
-      performSearch(query) {
+      search(query) {
         if (query === '' || query === undefined){
           this.setState({ results: [] });
           return;
@@ -34,7 +33,8 @@ class SearchReads extends Component {
     
         BooksAPI.search(query).then((books) => {
           if (books.constructor === Array) {
-            this.setState({ results: books });
+        	const results = books.map(book => ({...book, shelf: 'none'}))
+            this.setState({ results });
           } else {
             this.setState({ results: [] });
           }
@@ -44,21 +44,6 @@ class SearchReads extends Component {
     render() {
         const { onMove } = this.props
         const { query, results } = this.state
-        let message;
-    
-        if (query === '') {
-          message = (
-            <h2 style={{ textAlign: 'center' }}>
-              Write one or more keywords above to start searching.
-            </h2>
-          );
-        } else if (results.length === 0) {
-          message = (
-            <h2 style={{ textAlign: 'center' }}>
-              No results found. Try different keywords.
-            </h2>
-          );
-        }
     
         return (
           <div className="search-books">
@@ -69,12 +54,16 @@ class SearchReads extends Component {
                   type="text"
                   placeholder="Search by title or author"
                   value={query}
-                  onChange={event => this.handleQueryChange(event)}
+                  onChange={evt => this.onQueryChange(evt.target.value)}
                 />
               </div>
             </div>
             <div className="search-books-results">
-              {message}
+              { results.length === 0 && query !== '' && (
+                 <h2 style={{ textAlign: 'center' }}>
+                  Your search did not return any matches. Try different keywords.
+                 </h2>
+              )}
     
               {results.length > 0 && (
                   <ListBooks books={results} onMove={onMove} />

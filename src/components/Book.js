@@ -1,11 +1,12 @@
 import React from 'react';
 
-const Book = ({ title, authors, imageLinks, shelf, onMove=f=>f }) => {
-    return (
-        <li>
+const Book = ({ id, title, authors, imageLinks, shelf, onMove=f=>f }) => {
+  const thumbnail = 'thumbnail' in imageLinks ? imageLinks.thumbnail : 'default'
+  return (
+        <li key={id}>
             <div className="book">
             <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${imageLinks.thumbnail}")` }}></div>
+                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${thumbnail}")` }}></div>
                 <div className="book-shelf-changer">
                 <select value={shelf} onChange={(e)=> {onMove(e.target.value)}}>
                     <option value="none" disabled>Move to...</option>
