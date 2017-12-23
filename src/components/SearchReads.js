@@ -17,7 +17,7 @@ class SearchReads extends Component {
     
       constructor() {
         super();
-        this.search = debounce(500, false, this.search);
+        this.search = debounce(200, false, this.search);
       }
     
       onQueryChange(query) {
@@ -31,10 +31,9 @@ class SearchReads extends Component {
           return;
         }
     
-        BooksAPI.search(query).then((books) => {
-          if (books.constructor === Array) {
-        	const results = books.map(book => ({...book, shelf: 'none'}))
-            this.setState({ results });
+        BooksAPI.search(query).then((results) => {
+          if (results.constructor === Array) {
+        	this.setState({ results });
           } else {
             this.setState({ results: [] });
           }

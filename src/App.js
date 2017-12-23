@@ -1,6 +1,7 @@
 import React from 'react'
-import { Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import SweetAlert from 'sweetalert-react'
+import NoMatch from './NoMatch'
 import ListReads from './components/ListReads'
 import SearchReads from './components/SearchReads'
 import * as BooksAPI from './BooksAPI'
@@ -54,11 +55,24 @@ class BooksApp extends React.Component {
   }
 
   moveBook = (book, shelf) => {
-    if (shelf === 'none') return    
+    if (book.shelf !== shelf) {
+      BooksAPI.update(book, shelf).then(() => {
+        book.shelf = shelf
+        // Filter out the book and append it to the end of the list
+        // so it appears at the end of whatever shelf it was added to.
+        this.setState(state => ({
+          books: state.books.filter(b => b.id !== book.id).concat([ book ])
+        }))
+        
+        this.showAlert(book, shelf)
+      })
+    }
+    /*
     BooksAPI.update(book, shelf)
       .then(() => this.getBooks())
       .then(() => {
 		const bookFound = this.state.books.filter(b => b.id === book.id).length > 0
+        this.showAlert(book, shelf)
         if (!bookFound) {
           this.addBook(book)
         } else {
@@ -73,7 +87,7 @@ class BooksApp extends React.Component {
           this.setState({books})
         }      	
       })
-    .then(() => this.showAlert(book, shelf))
+      */
   } 
 
   render() {
@@ -82,18 +96,21 @@ class BooksApp extends React.Component {
     return (
       <BrowserRouter>
         <div className="app">
-          <Route exact path='/' render={() => (
-            <ListReads books={books} onMove={moveBook} />
-          )} />
-          <Route path='/search'  render={() => (
-            <SearchReads onMove={moveBook} />
-          )} />
-          <SweetAlert
-            show={this.state.moved}
-            title={this.state.title}
-            text={this.state.currentShelf}
-            onConfirm={() => this.setState({ moved: false, currentShelf: '', title: '' })}
-          />
+			<Switch>
+				<Route exact path='/' render={() => (
+            		<ListReads books={books} onMove={moveBook} />
+          		)} />
+          		<Route path='/search'  render={() => (
+            		<SearchReads onMove={moveBook} />
+          		)} />
+				<Route component={NoMatch}/>
+      		</Switch>
+          	<SweetAlert
+            	show={this.state.moved}
+            	title={this.state.title}
+            	text={this.state.currentShelf}
+            	onConfirm={() => this.setState({ moved: false, currentShelf: '', title: '' })}
+          	/>
         </div>
       </BrowserRouter>
     )

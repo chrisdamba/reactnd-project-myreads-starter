@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Book = ({ id, title, authors, imageLinks, shelf, onMove=f=>f }) => {
-  const thumbnail = 'thumbnail' in imageLinks ? imageLinks.thumbnail : 'default'
+  const thumbnail = (imageLinks && 'thumbnail' in imageLinks) ? imageLinks.thumbnail : 'http://via.placeholder.com/128x193?text=No%20Cover'
   return (
         <li key={id}>
             <div className="book">
